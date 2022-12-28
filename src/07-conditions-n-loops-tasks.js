@@ -51,11 +51,11 @@ function getFizzBuzz(num) {
  *   10 => 3628800
  */
 function getFactorial(n) {
-  let integral = 1;
+  let factorial = 1;
   for (let i = n; i > 0; i -= 1) {
-    integral *= i;
+    factorial *= i;
   }
-  return integral;
+  return factorial;
 }
 
 /**
@@ -274,8 +274,20 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  const ccnArr = `${ccn}`.split('').map((val) => Number(val)).reverse();
+  for (let i = 1; i <= ccnArr.length; i += 1) {
+    if (i % 2 === 0) {
+      let evenNum = ccnArr[i - 1];
+      evenNum *= 2;
+      if (evenNum > 9) {
+        evenNum = `${evenNum}`.split('').map((val) => Number(val)).reduce((a, b) => a + b);
+      }
+      ccnArr[i - 1] = evenNum;
+    }
+  }
+  const sum = ccnArr.reduce((a, b) => a + b);
+  return sum % 10 === 0;
 }
 
 /**
@@ -322,8 +334,24 @@ function getDigitalRoot(num) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const closingBracketPair = {
+    ']': '[',
+    '}': '{',
+    ')': '(',
+    '>': '<',
+  };
+  const stack = [];
+  for (let i = 0; i < str.length; i += 1) {
+    if (!closingBracketPair[str[i]]) {
+      stack.push(str[i]);
+    } else if (stack[stack.length - 1] === closingBracketPair[str[i]]) {
+      stack.pop();
+    } else {
+      return false;
+    }
+  }
+  return stack.length === 0;
 }
 
 /**
